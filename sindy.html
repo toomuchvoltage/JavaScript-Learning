@@ -30,10 +30,10 @@
 		_w.push (Math.random());
 		_X.push ([]);
 		for (curX in inpX) {
-			if ( c == 0 )
-				_X[c].push (Math.pow(inpX[curX], c));
+			if ( c < 5 )
+				_X[c].push (Math.cos (c * inpX[curX]));
 			else
-				_X[c].push (Math.sin (c * inpX[curX]));
+				_X[c].push (Math.sin ((c-4) * inpX[curX]));
 		}
 	}
 	
@@ -89,10 +89,10 @@
 	for (let cx in inpX) {
 		let evalPred = 0.0;
 		for (let c = 0;c != featureCount;c++) {
-			if ( c == 0 )
-				evalPred += _w[c] * Math.pow (inpX[cx],c);
+			if ( c < 5 )
+				evalPred += _w[c] * Math.cos (c * inpX[cx]);
 			else
-				evalPred += _w[c] * Math.sin (c * inpX[cx]);
+				evalPred += _w[c] * Math.sin ((c-4) * inpX[cx]);
 		}
 		predY.push (evalPred);
 	}
