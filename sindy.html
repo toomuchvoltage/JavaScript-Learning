@@ -1,0 +1,115 @@
+<html>
+<head>
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+<div id="tester" style="width:1000px;height:800px;"></div>
+<script>	
+	featureCount = 11;
+	stepSize = 0.0001;
+	maxIter = 1000;
+	symmetricDelta = 0.001;
+	
+	function BlackBox (inpVal) {
+		return Math.sin(inpVal) + 2.0*Math.sin(3.0 * inpVal) + (Math.random() * 0.2- 0.1);
+	}
+
+	inpX = [];
+	inpY = [];
+	predY = [];
+	// Generate training input
+	for (let c = -1000;c != 1000;c++) {
+		let xVal = (c*0.001) * Math.PI * 2.0;
+		inpX.push (xVal);
+		inpY.push (BlackBox(xVal));
+	}
+	
+	_w = [];
+	_X = [];
+	for (let c = 0;c != featureCount;c++) { // Create feature/design matrix
+		_w.push (Math.random());
+		_X.push ([]);
+		for (curX in inpX) {
+			if ( c == 0 )
+				_X[c].push (Math.pow(inpX[curX], c));
+			else
+				_X[c].push (Math.sin (c * inpX[curX]));
+		}
+	}
+	
+	function yHat (forRow) {
+		let sum = 0.0;
+		for (let c2 = 0;c2 != featureCount;c2++) {
+			sum += _w[c2] * _X[c2][forRow];
+		}
+		return sum;
+	}
+	
+	function Cost () {
+		let sum = 0.0;
+		for (let c = 0;c != inpX.length;c++) {
+			let curEval = inpY[c] - yHat(c);
+			sum += curEval * curEval;
+		}
+		return sum;
+	}
+	
+	// OLS
+	for (let i = 0;i != maxIter;i++)
+		for (let j = 0;j != _w.length;j++) {
+			_w[j] -= symmetricDelta;
+			let Cost1 = Cost ();
+			_w[j] += symmetricDelta*2.0;
+			let Cost2 = Cost ();
+			let gWj_1 = (Cost2 - Cost1) / (symmetricDelta*2.0);
+			_w[j] -= symmetricDelta;
+			
+			_w[j] -= gWj_1 * stepSize;
+		}
+		
+	// Display weights in console
+	console.log (_w);
+
+	TESTER = document.getElementById('tester');
+	Plotly.plot( TESTER, [{
+		x: inpX,
+		y: inpY,
+		mode: 'markers',
+		type: 'scatter'
+	}], {
+		autosize: false,
+		width: 1000,
+		height: 800,
+		margin: {
+			t: 0
+		}
+	});
+	
+	// Test prediction
+	for (let cx in inpX) {
+		let evalPred = 0.0;
+		for (let c = 0;c != featureCount;c++) {
+			if ( c == 0 )
+				evalPred += _w[c] * Math.pow (inpX[cx],c);
+			else
+				evalPred += _w[c] * Math.sin (c * inpX[cx]);
+		}
+		predY.push (evalPred);
+	}
+	
+	Plotly.plot( TESTER, [{
+		x: inpX,
+		y: predY,
+		type: 'scatter'
+	}], {
+		autosize: false,
+		width: 1000,
+		height: 800,
+		margin: {
+			t: 0
+		}
+	});
+
+</script>
+</body>
+</html>
