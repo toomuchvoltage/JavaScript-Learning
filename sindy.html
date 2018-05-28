@@ -61,10 +61,10 @@
 			let Cost1 = Cost ();
 			_w[j] += symmetricDelta*2.0;
 			let Cost2 = Cost ();
-			let gWj_1 = (Cost2 - Cost1) / (symmetricDelta*2.0);
+			let costGrad = (Cost2 - Cost1) / (symmetricDelta*2.0);
 			_w[j] -= symmetricDelta;
 			
-			_w[j] -= gWj_1 * stepSize;
+			_w[j] -= costGrad * stepSize;
 		}
 		
 	// Display weights in console
