@@ -1,0 +1,168 @@
+​<html>
+<head>
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+<div id="tester" style="width:1000px;height:800px;"></div>
+<script>
+  // Hyper-params
+  let iterCount = 1000;
+  let weightDelta = 0.01;
+  let descentFactor = 0.05;
+  let bias = 0.01;
+  let actFunc = function(x) {    // SiLU
+	return x / (1.0 + Math.exp(-x));
+  };
+  let outPutAct = function (x) { // ReLU
+	return x > 0.0 ? x : 0.0;
+  };
+
+  let net = [[], [], []];
+  net[0] = [
+  	{
+      type: 'input',
+      feature: 'x',
+      val: 0.0
+    }
+  ];
+  net[1] = [
+  	{
+      type: 'hidden',
+	  act: actFunc,
+      links: [
+      	{
+        	target: net[0][0],
+      		w: Math.random() - 0.5
+        }
+      ]
+    },
+  	{
+      type: 'hidden',
+	  act: actFunc,
+      links: [
+      	{
+        	target: net[0][0],
+      		w: Math.random() - 0.5
+        }
+      ]
+    },
+   	{
+	  type: 'hidden',
+	  act: actFunc,
+      links: [
+      	{
+        	target: net[0][0],
+      		w: Math.random() - 0.5
+        }
+      ]
+    }
+  ];
+  net[2] = [
+  	{
+      type: 'output',
+      act: outPutAct,
+      links: [
+      	{
+        	target: net[1][0], 
+      		w: Math.random() - 0.5
+        },
+      	{
+        	target: net[1][1], 
+      		w: Math.random() - 0.5
+        },
+        {
+        	target: net[1][2], 
+      		w: Math.random() - 0.5
+        }
+      ]
+    }
+  ];
+
+  function outp (neuron) {
+    if (neuron.type == 'input') return neuron.val;
+  	let retVal = 0.0;
+  	for (link in neuron.links) {
+    	let curLink = neuron.links[link];
+    	retVal += curLink.w * outp(curLink.target);
+    }
+    return neuron.act (retVal + bias);
+  }
+  
+  function cost(dataSet) {
+  	let costRes = 0.0;
+  	for (i in dataSet) {
+      net[0][0].val = dataSet[i].x;
+      let cAmt = outp (net[2][0]) - dataSet[i].y;
+      costRes += (cAmt * cAmt);
+    }
+    return costRes;
+  }
+  
+  let groundTruth = [];
+  let gtX = [];
+  let gtY = [];
+  for (let i = 0.0; i < 3.14; i += 0.1) {
+  	let eX = i;
+    let eY = Math.sin(i);
+    gtX.push (eX);
+    gtY.push (eY);
+    groundTruth.push ({x: eX, y: eY});
+  }
+  
+  for (let ii = 0; ii != iterCount; ii++) {
+  	for (let i = net.length - 1; i != -1; i--) {
+	  	for (let j = 0; j != net[i].length; j++) {
+      	if (net[i][j].type == 'input') continue;
+        for (let k = 0; k != net[i][j].links.length; k++) {
+          net[i][j].links[k].w += weightDelta;
+          let out1 = cost(groundTruth);
+          net[i][j].links[k].w -= weightDelta * 2.0;
+          let out2 = cost(groundTruth);
+          net[i][j].links[k].w += weightDelta;
+          net[i][j].links[k].w -= ((out1 - out2) / (weightDelta * 2.0)) * descentFactor;
+        }
+      }
+    }
+    console.log (cost(groundTruth));
+  }
+  
+  inpX = [];
+  for (let i = 0.0; i < 6.14; i += 0.1) {
+  	inpX.push (i);
+  }
+  predY = [];
+  for (i in inpX) {
+  	net[0][0].val = inpX[i];
+  	predY.push (outp(net[2][0]));
+  }
+  
+	TESTER = document.getElementById('tester');
+  	Plotly.plot( TESTER, [{
+		x: gtX,
+		y: gtY,
+		type: 'scatter',
+		mode: 'markers'
+	}], {
+		autosize: false,
+		width: 1000,
+		height: 800,
+		margin: {
+			t: 0
+		}
+	});
+	Plotly.plot( TESTER, [{
+		x: inpX,
+		y: predY,
+		type: 'scatter'
+	}], {
+		autosize: false,
+		width: 1000,
+		height: 800,
+		margin: {
+			t: 0
+		}
+	});
+
+</script>
+</body>
+</html>
