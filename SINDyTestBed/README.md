@@ -9,3 +9,9 @@ Lasso will mainly get rid of small features which you can probably remove yourse
 * I'm not using it for dynamics systems yet... just imagine that sine wave swingy thing being something's velocity.
 
 Nevertheless, it acted like a decent FFT on an Oscilloscope.
+
+## Example
+
+https://jsfiddle.net/r6nykwqh/
+
+![Example Run](https://raw.githubusercontent.com/toomuchvoltage/SINDyTestBed/master/SINDyTestBed/sindyexample.png)
