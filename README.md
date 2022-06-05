@@ -14,10 +14,10 @@ https://jsfiddle.net/r6nykwqh/
 
 A super-minimalist neural network playground in JavaScript.
 
-* **[nn.html](https://raw.githubusercontent.com/toomuchvoltage/JSNN-playground/master/nn.html)**: A 3-layer non-deep neural network (1000 iterations): https://jsfiddle.net/th7ocs30/
-  ![NNScreenShot](https://raw.githubusercontent.com/toomuchvoltage/JSNN-playground/master/nnscreen.png)
-* **[rnn.html](https://raw.githubusercontent.com/toomuchvoltage/JSNN-playground/master/rnn.html)**: An Elman recurrent neural-network (100 iterations): https://jsfiddle.net/8j7oht62/
-  ![RNNScreenShot](https://raw.githubusercontent.com/toomuchvoltage/JSNN-playground/master/rnnscreen.png)
+* **[nn.html](https://raw.githubusercontent.com/toomuchvoltage/JavaScript-Learning/master/JSNN-Playground/nn.html)**: A 3-layer non-deep neural network (1000 iterations): https://jsfiddle.net/th7ocs30/
+  ![NNScreenShot](https://raw.githubusercontent.com/toomuchvoltage/JavaScript-Learning/master/JSNN-Playground/nnscreen.png)
+* **[rnn.html](https://raw.githubusercontent.com/toomuchvoltage/JavaScript-Learning/master/JSNN-Playground/rnn.html)**: An Elman recurrent neural-network (100 iterations): https://jsfiddle.net/8j7oht62/
+  ![RNNScreenShot](https://raw.githubusercontent.com/toomuchvoltage/JavaScript-Learning/master/JSNN-Playground/rnnscreen.png)
 
 # BestFitOOBB-Regression
 
